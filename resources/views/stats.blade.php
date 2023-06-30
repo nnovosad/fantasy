@@ -3,5 +3,5 @@
 @section('title', 'Last Season Stats')
 
 @section('content')
-    @livewire('table')
+    @livewire('last-season-stats')
 @endsection
