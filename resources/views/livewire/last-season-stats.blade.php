@@ -31,6 +31,18 @@
                     class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Total Score
                 </th>
+                <th scope="col"
+                    class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Goal
+                </th>
+                <th scope="col"
+                    class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Assists
+                </th>
+                <th scope="col"
+                    class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Average Score
+                </th>
             </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
@@ -42,6 +54,9 @@
                     <td class="px-6 py-4 whitespace-nowrap">{{ $playerInfo['team']['name'] }}</td>
                     <td class="px-6 py-4 whitespace-nowrap">{{ ucfirst(strtolower($playerInfo['role'])) }}</td>
                     <td class="px-6 py-4 whitespace-nowrap">{{ $playerInfo['seasonScoreInfo']['score'] }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">{{ $playerInfo['gameStat']['goals'] }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">{{ $playerInfo['gameStat']['assists'] }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">{{ $playerInfo['seasonScoreInfo']['averageScore'] }}</td>
                 </tr>
             @endforeach
             </tbody>
