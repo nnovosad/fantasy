@@ -24,9 +24,13 @@ class LeagueService implements LeagueInterface
 
     public function getCountries(): array
     {
-        return array_map(function ($file) {
+        $countries = array_map(function ($file) {
             return $this->prepareCountryName($file);
         }, $this->getFiles());
+
+        sort($countries);
+
+        return $countries;
     }
 
     private function prepareCountryName(string $file): string

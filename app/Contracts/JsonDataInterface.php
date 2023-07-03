@@ -8,5 +8,9 @@ use Illuminate\Support\Collection;
 
 interface JsonDataInterface
 {
-    public function getData(?string $file): Collection;
+    public function getData(string $file): Collection;
+
+    public function getTeams(string $file): array;
+
+    public function getRoles(string $file): array;
 }

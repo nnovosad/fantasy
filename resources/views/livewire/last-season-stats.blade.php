@@ -12,6 +12,26 @@
 
     @if(!empty($players))
         <h1 class="text-2xl font-bold mt-8 mb-4">{{ $selected_league }}</h1>
+
+        <div class="mb-4 flex space-x-4">
+
+            <select id="teams"
+                    class="block w-48 px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                <option>Select Team</option>
+                @foreach($teams as $team)
+                    <option>{{ $team }}</option>
+                @endforeach
+            </select>
+
+            <select id="roles"
+                    class="block w-48 px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                <option>Select Role</option>
+                @foreach($roles as $role)
+                    <option>{{ ucfirst(strtolower($role)) }}</option>
+                @endforeach
+            </select>
+        </div>
+
         <table class="min-w-full divide-y divide-gray-200">
             <thead>
             <tr>
