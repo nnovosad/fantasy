@@ -40,13 +40,13 @@
                 <tr>
                     <td class="px-6 py-4 whitespace-nowrap">{{ $playerInfo['name'] }}</td>
                     <td class="px-6 py-4 whitespace-nowrap">{{ $playerInfo['team']['name'] }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap">{{ $playerInfo['role'] }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">{{ ucfirst(strtolower($playerInfo['role'])) }}</td>
                     <td class="px-6 py-4 whitespace-nowrap">{{ $playerInfo['seasonScoreInfo']['score'] }}</td>
                 </tr>
             @endforeach
             </tbody>
         </table>
 
-        {{ $players->links() }}
+        {{ $players->links('pagination-links') }}
     @endif
 </div>
