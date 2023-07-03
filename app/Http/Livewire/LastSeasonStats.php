@@ -7,14 +7,13 @@ use App\Contracts\LeagueInterface;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
-use Illuminate\Support\Collection;
 use Livewire\Component;
 
 class LastSeasonStats extends Component
 {
-    public string $league = '';
+    private const PAGINATION_COUNT = 15;
 
-    public ?Collection $data = null;
+    public string $league = '';
 
     private LeagueInterface $leagueService;
 
@@ -26,22 +25,35 @@ class LastSeasonStats extends Component
         $this->jsonData = $jsonData;
     }
 
+    public function mount(): void
+    {
+        $this->league = request()->query('league', '');
+    }
+
     public function render(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
+        $data = null;
+
+        if (!empty($this->league)) {
+            $file = $this->leagueService->getFileByLeague($this->league);
+            $data = $this->jsonData
+                ->getData($file)
+                ->paginate(static::PAGINATION_COUNT)
+                ->withQueryString();
+        }
+
         return view(
             'livewire.last-season-stats',
             [
                 'leagues' => $this->leagueService->getCountries(),
-                'selected_league' => $this->league,
-                'data' => !is_null($this->data) ? $this->data->paginate(15) : collect(),
+                'selected_league' => ucfirst($this->league),
+                'players' => $data,
             ]
         );
     }
 
     public function changeLeague(): void
     {
-        $file = $this->leagueService->getFileByLeague($this->league);
-
-        $this->data = $this->jsonData->getData($file);
+        $this->redirect(route('stats', ['league' => $this->league]));
     }
 }

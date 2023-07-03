@@ -19,4 +19,4 @@ Route::get('/', function () {
 
 Route::get('/stats', function () {
     return view('stats');
-});
+})->name('stats');
