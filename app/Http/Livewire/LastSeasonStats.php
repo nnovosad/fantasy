@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Contracts\FiltrationDataInterface;
 use App\Contracts\JsonDataInterface;
 use App\Contracts\LeagueInterface;
 use Illuminate\Contracts\View\Factory;
@@ -15,19 +16,31 @@ class LastSeasonStats extends Component
 
     public string $league = '';
 
+    public string $team = '';
+    public string $role = '';
+
     private LeagueInterface $leagueService;
 
     private JsonDataInterface $jsonData;
 
-    public function boot(LeagueInterface $leagueService, JsonDataInterface $jsonData): void
+    private FiltrationDataInterface $filtrationData;
+
+    public function boot(
+        LeagueInterface $leagueService,
+        JsonDataInterface $jsonData,
+        FiltrationDataInterface $filtrationData
+    ): void
     {
         $this->leagueService = $leagueService;
         $this->jsonData = $jsonData;
+        $this->filtrationData = $filtrationData;
     }
 
     public function mount(): void
     {
         $this->league = request()->query('league', '');
+        $this->team = request()->query('team', '');
+        $this->role = request()->query('role', '');
     }
 
     public function render(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
@@ -41,8 +54,12 @@ class LastSeasonStats extends Component
 
             if ($leagueFile !== null) {
                 $playersData = $this->jsonData
-                    ->getData($leagueFile)
-                    ->paginate(static::PAGINATION_COUNT)
+                    ->getData($leagueFile);
+
+                $playersData = $this->filtrationData
+                    ->handler($playersData, $this->team, $this->role);
+
+                $playersData = $playersData->paginate(static::PAGINATION_COUNT)
                     ->withQueryString();
 
                 $teamsData = $this->jsonData
@@ -72,6 +89,29 @@ class LastSeasonStats extends Component
 
     public function changeLeague(): void
     {
-        $this->redirect(route('stats', ['league' => $this->league]));
+        $this->redirect(
+            route(
+                'stats',
+                [
+                    'league' => $this->league,
+                    'team' => $this->team,
+                    'role' => $this->role,
+                ],
+            )
+        );
+    }
+
+    public function changeFilter(): void
+    {
+        $this->redirect(
+            route(
+                'stats',
+                [
+                    'team' => $this->team,
+                    'league' => $this->league,
+                    'role' => $this->role,
+                ],
+            )
+        );
     }
 }

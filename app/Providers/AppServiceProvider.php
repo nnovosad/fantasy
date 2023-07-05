@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Contracts\FiltrationDataInterface;
 use App\Contracts\JsonDataInterface;
 use App\Contracts\LeagueInterface;
+use App\Services\FiltrationDataService;
 use App\Services\JsonDataService;
 use App\Services\LeagueService;
 use Illuminate\Support\ServiceProvider;
@@ -22,6 +24,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->singleton(LeagueInterface::class, LeagueService::class);
         $this->app->singleton(JsonDataInterface::class, JsonDataService::class);
+        $this->app->singleton(FiltrationDataInterface::class, FiltrationDataService::class);
     }
 
     /**

@@ -15,19 +15,19 @@
 
         <div class="mb-4 flex space-x-4">
 
-            <select id="teams"
+            <select id="teams" wire:model="team" wire:change="changeFilter" wire:key="team"
                     class="block w-48 px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                <option>Select Team</option>
+                <option value="">All Teams</option>
                 @foreach($teams as $team)
                     <option>{{ $team }}</option>
                 @endforeach
             </select>
 
-            <select id="roles"
+            <select id="roles" wire:model="role" wire:change="changeFilter" wire:key="role"
                     class="block w-48 px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                <option>Select Role</option>
+                <option value="">All Roles</option>
                 @foreach($roles as $role)
-                    <option>{{ ucfirst(strtolower($role)) }}</option>
+                    <option value="{{ $role }}">{{ ucfirst(strtolower($role)) }}</option>
                 @endforeach
             </select>
         </div>
@@ -35,6 +35,10 @@
         <table class="min-w-full divide-y divide-gray-200">
             <thead>
             <tr>
+                <th scope="col"
+                    class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    #
+                </th>
                 <th scope="col"
                     class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Name
@@ -66,16 +70,20 @@
             </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
-            @foreach($players as $player)
-                @php $playerInfo=$player['player']; @endphp
+            @foreach($players as $key => $player)
+                @php
+                    $playerInfo=$player['player'];
+                    $rowNumber = ($players->currentPage() - 1) * $players->perPage() + $loop->iteration;
+                @endphp
 {{--                {{ dd($player) }}--}}
-                <tr>
+                <tr class="{{ $loop->even ? 'bg-gray-100' : '' }}">
+                    <td class="px-6 py-4 whitespace-nowrap">{{ $rowNumber }}</td>
                     <td class="px-6 py-4 whitespace-nowrap">{{ $playerInfo['name'] }}</td>
                     <td class="px-6 py-4 whitespace-nowrap">{{ $playerInfo['team']['name'] }}</td>
                     <td class="px-6 py-4 whitespace-nowrap">{{ ucfirst(strtolower($playerInfo['role'])) }}</td>
                     <td class="px-6 py-4 whitespace-nowrap">{{ $playerInfo['seasonScoreInfo']['score'] }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap">{{ $playerInfo['gameStat']['goals'] }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap">{{ $playerInfo['gameStat']['assists'] }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">{{ isset($playerInfo['gameStat']) ? $playerInfo['gameStat']['goals'] : 0 }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">{{ isset($playerInfo['gameStat']) ? $playerInfo['gameStat']['assists'] : 0 }}</td>
                     <td class="px-6 py-4 whitespace-nowrap">{{ $playerInfo['seasonScoreInfo']['averageScore'] }}</td>
                 </tr>
             @endforeach
