@@ -12,7 +12,7 @@ class LeagueService implements LeagueInterface
 {
     private const DISK_NAME = 'local';
 
-    private const DIRECTORY_NAME = 'fantasy-data';
+    private const DIRECTORY_NAME = 'fantasy-data/completed/22-23';
 
     /** @var FilesystemAdapter $storage */
     private FilesystemAdapter $storage;

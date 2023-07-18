@@ -9,11 +9,13 @@ use App\Contracts\JsonDataInterface;
 use App\Contracts\LeagueInterface;
 use App\Contracts\SearchDataInterface;
 use App\Contracts\SortingDataInterface;
+use App\Contracts\StartingDataInterface;
 use App\Services\FiltrationDataService;
 use App\Services\JsonDataService;
 use App\Services\LeagueService;
 use App\Services\SearchDataService;
 use App\Services\SortingDataService;
+use App\Services\StartingDataService;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
@@ -31,6 +33,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(FiltrationDataInterface::class, FiltrationDataService::class);
         $this->app->singleton(SortingDataInterface::class, SortingDataService::class);
         $this->app->singleton(SearchDataInterface::class, SearchDataService::class);
+        $this->app->singleton(StartingDataInterface::class, StartingDataService::class);
     }
 
     /**

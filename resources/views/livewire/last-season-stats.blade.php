@@ -31,6 +31,14 @@
                 @endforeach
             </select>
 
+            <select id="prices"
+                    class="block w-48 px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                <option value="">Prices</option>
+                @foreach($prices as $price)
+                    <option value="{{ $price }}">{{ $price }}</option>
+                @endforeach
+            </select>
+
             <label>
                 <input
                     type="text"
@@ -81,10 +89,6 @@
                     wire:click="sortOrder('assists')">
                     Assists {!! $sortLink !!}
                 </th>
-                <th scope="col"
-                    class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Average Score
-                </th>
             </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
@@ -102,7 +106,6 @@
                     <td class="px-6 py-4 whitespace-nowrap">{{ $playerInfo['seasonScoreInfo']['score'] }}</td>
                     <td class="px-6 py-4 whitespace-nowrap">{{ isset($playerInfo['gameStat']) ? $playerInfo['gameStat']['goals'] : 0 }}</td>
                     <td class="px-6 py-4 whitespace-nowrap">{{ isset($playerInfo['gameStat']) ? $playerInfo['gameStat']['assists'] : 0 }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap">{{ $playerInfo['seasonScoreInfo']['averageScore'] }}</td>
                 </tr>
             @endforeach
             </tbody>

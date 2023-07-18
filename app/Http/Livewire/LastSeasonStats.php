@@ -7,6 +7,7 @@ use App\Contracts\JsonDataInterface;
 use App\Contracts\LeagueInterface;
 use App\Contracts\SearchDataInterface;
 use App\Contracts\SortingDataInterface;
+use App\Contracts\StartingDataInterface;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
@@ -37,12 +38,15 @@ class LastSeasonStats extends Component
 
     private SearchDataInterface $searchService;
 
+    private StartingDataInterface $startingData;
+
     public function boot(
         LeagueInterface $leagueService,
         JsonDataInterface $jsonData,
         FiltrationDataInterface $filtrationData,
         SortingDataInterface $sortingData,
-        SearchDataInterface $searchService
+        SearchDataInterface $searchService,
+        StartingDataInterface $startingData
     ): void
     {
         $this->leagueService = $leagueService;
@@ -50,6 +54,7 @@ class LastSeasonStats extends Component
         $this->filtrationData = $filtrationData;
         $this->sortingData = $sortingData;
         $this->searchService = $searchService;
+        $this->startingData = $startingData;
     }
 
     public function mount(): void
@@ -64,6 +69,7 @@ class LastSeasonStats extends Component
         $playersData = null;
         $teamsData = null;
         $rolesData = null;
+        $pricesData = null;
 
         if (!empty($this->league)) {
             $leagueFile = $this->leagueService->getFileByLeague($this->league);
@@ -93,13 +99,19 @@ class LastSeasonStats extends Component
 
                 $rolesData = $this->jsonData
                     ->getRoles($leagueFile);
+
+                $startingFile = $this->startingData
+                    ->getFileByLeague($this->league);
+
+                $pricesData = $this->jsonData
+                    ->getPrices($startingFile);
             }
         }
 
-        return $this->buildView($playersData, $teamsData, $rolesData);
+        return $this->buildView($playersData, $teamsData, $rolesData, $pricesData);
     }
 
-    private function buildView($playersData, $teamsData, $rolesData) : View
+    private function buildView($playersData, $teamsData, $rolesData, $pricesData) : View
     {
         return view(
             'livewire.last-season-stats',
@@ -109,6 +121,7 @@ class LastSeasonStats extends Component
                 'players' => $playersData,
                 'teams' => $teamsData,
                 'roles' => $rolesData,
+                'prices' => $pricesData,
             ]
         );
     }
@@ -120,8 +133,8 @@ class LastSeasonStats extends Component
                 'stats',
                 [
                     'league' => $this->league,
-                    'team' => $this->team,
-                    'role' => $this->role,
+                    'team' => '',
+                    'role' => '',
                 ],
             )
         );

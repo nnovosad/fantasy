@@ -13,4 +13,6 @@ interface JsonDataInterface
     public function getTeams(string $file): array;
 
     public function getRoles(string $file): array;
+
+    public function getPrices(string $file): array;
 }
