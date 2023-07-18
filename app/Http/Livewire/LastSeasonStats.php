@@ -5,6 +5,7 @@ namespace App\Http\Livewire;
 use App\Contracts\FiltrationDataInterface;
 use App\Contracts\JsonDataInterface;
 use App\Contracts\LeagueInterface;
+use App\Contracts\SortingDataInterface;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
@@ -19,21 +20,29 @@ class LastSeasonStats extends Component
     public string $team = '';
     public string $role = '';
 
+    public string $orderColumn = '';
+    public string $sortOrder = 'desc';
+    public string $sortLink = '<i class="sorticon fa-solid fa-caret-up"></i>';
+
     private LeagueInterface $leagueService;
 
     private JsonDataInterface $jsonData;
 
     private FiltrationDataInterface $filtrationData;
 
+    private SortingDataInterface $sortingData;
+
     public function boot(
         LeagueInterface $leagueService,
         JsonDataInterface $jsonData,
-        FiltrationDataInterface $filtrationData
+        FiltrationDataInterface $filtrationData,
+        SortingDataInterface $sortingData
     ): void
     {
         $this->leagueService = $leagueService;
         $this->jsonData = $jsonData;
         $this->filtrationData = $filtrationData;
+        $this->sortingData = $sortingData;
     }
 
     public function mount(): void
@@ -58,6 +67,11 @@ class LastSeasonStats extends Component
 
                 $playersData = $this->filtrationData
                     ->handler($playersData, $this->team, $this->role);
+
+                if ($this->orderColumn !== "") {
+                    $playersData = $this->sortingData
+                        ->sorting($playersData, $this->orderColumn, $this->sortOrder);
+                }
 
                 $playersData = $playersData->paginate(static::PAGINATION_COUNT)
                     ->withQueryString();
@@ -113,5 +127,20 @@ class LastSeasonStats extends Component
                 ],
             )
         );
+    }
+
+    public function sortOrder($columnName = ""): void
+    {
+        if ($this->sortOrder == 'asc') {
+            $this->sortOrder = 'desc';
+            $caretOrder = "down";
+        } else {
+            $this->sortOrder = 'asc';
+            $caretOrder = "up";
+        }
+
+        $this->sortLink = '<i class="sorticon fa-solid fa-caret-'.$caretOrder.'"></i>';
+
+        $this->orderColumn = $columnName;
     }
 }
