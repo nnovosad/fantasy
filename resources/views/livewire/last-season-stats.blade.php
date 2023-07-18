@@ -30,6 +30,22 @@
                     <option value="{{ $role }}">{{ ucfirst(strtolower($role)) }}</option>
                 @endforeach
             </select>
+
+            <label>
+                <input
+                    type="text"
+                    placeholder="Search Players"
+                    wire:model.debounce.500ms="search"
+                    class="block w-48 px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                />
+            </label>
+
+            <button
+                wire:click="resetFilters"
+                class="block w-48 px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+            >
+                Reset Filters
+            </button>
         </div>
 
         <table class="min-w-full divide-y divide-gray-200">

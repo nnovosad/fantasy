@@ -5,6 +5,7 @@ namespace App\Http\Livewire;
 use App\Contracts\FiltrationDataInterface;
 use App\Contracts\JsonDataInterface;
 use App\Contracts\LeagueInterface;
+use App\Contracts\SearchDataInterface;
 use App\Contracts\SortingDataInterface;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -24,6 +25,8 @@ class LastSeasonStats extends Component
     public string $sortOrder = 'desc';
     public string $sortLink = '<i class="sorticon fa-solid fa-caret-up"></i>';
 
+    public string $search = '';
+
     private LeagueInterface $leagueService;
 
     private JsonDataInterface $jsonData;
@@ -32,17 +35,21 @@ class LastSeasonStats extends Component
 
     private SortingDataInterface $sortingData;
 
+    private SearchDataInterface $searchService;
+
     public function boot(
         LeagueInterface $leagueService,
         JsonDataInterface $jsonData,
         FiltrationDataInterface $filtrationData,
-        SortingDataInterface $sortingData
+        SortingDataInterface $sortingData,
+        SearchDataInterface $searchService
     ): void
     {
         $this->leagueService = $leagueService;
         $this->jsonData = $jsonData;
         $this->filtrationData = $filtrationData;
         $this->sortingData = $sortingData;
+        $this->searchService = $searchService;
     }
 
     public function mount(): void
@@ -67,6 +74,11 @@ class LastSeasonStats extends Component
 
                 $playersData = $this->filtrationData
                     ->handler($playersData, $this->team, $this->role);
+
+                if ($this->search !== "") {
+                    $playersData = $this->searchService
+                        ->search($playersData, $this->search);
+                }
 
                 if ($this->orderColumn !== "") {
                     $playersData = $this->sortingData
@@ -142,5 +154,17 @@ class LastSeasonStats extends Component
         $this->sortLink = '<i class="sorticon fa-solid fa-caret-'.$caretOrder.'"></i>';
 
         $this->orderColumn = $columnName;
+    }
+
+    public function resetFilters(): void
+    {
+        $this->redirect(
+            route(
+                'stats',
+                [
+                    'league' => $this->league,
+                ],
+            )
+        );
     }
 }
