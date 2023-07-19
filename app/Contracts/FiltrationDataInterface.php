@@ -8,5 +8,5 @@ use Illuminate\Support\Collection;
 
 interface FiltrationDataInterface
 {
-    public function handler(Collection $data, string $team, string $role): Collection;
+    public function handler(Collection $data, string $team, string $role, float $minPrice, float $maxPrice): Collection;
 }

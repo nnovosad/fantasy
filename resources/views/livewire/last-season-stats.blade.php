@@ -31,19 +31,11 @@
                 @endforeach
             </select>
 
-            <select id="prices"
-                    class="block w-48 px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                <option value="">Prices</option>
-                @foreach($prices as $price)
-                    <option value="{{ $price }}">{{ $price }}</option>
-                @endforeach
-            </select>
-
             <label>
                 <input
                     type="text"
                     placeholder="Search Players"
-                    wire:model.debounce.500ms="search"
+                    wire:model.debounce.250ms="search"
                     class="block w-48 px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                 />
             </label>
@@ -55,6 +47,30 @@
                 Reset Filters
             </button>
         </div>
+
+        @if(count($prices) > 0)
+            <div class="mb-4 space-x-4 flex flex-wrap items-center">
+                <div class="flex items-center mr-4">
+                    <label for="min-price" class="text-gray-700 text-sm font-bold mr-2">From</label>
+                    <select id="min-price" wire:model="minPrice"
+                            class="block w-48 px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                        @foreach($prices as $price)
+                            <option value="{{ $price }}">{{ $price }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="flex items-center">
+                    <label for="max-price" class="text-gray-700 text-sm font-bold mr-2">To</label>
+                    <select id="max-price" wire:model="maxPrice"
+                            class="block w-48 px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                        @foreach($pricesDesc as $price)
+                            <option value="{{ $price }}">{{ $price }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+        @endif
 
         <table class="min-w-full divide-y divide-gray-200">
             <thead>
@@ -89,6 +105,10 @@
                     wire:click="sortOrder('assists')">
                     Assists {!! $sortLink !!}
                 </th>
+                <th scope="col"
+                    class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    New Price
+                </th>
             </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
@@ -106,6 +126,7 @@
                     <td class="px-6 py-4 whitespace-nowrap">{{ $playerInfo['seasonScoreInfo']['score'] }}</td>
                     <td class="px-6 py-4 whitespace-nowrap">{{ isset($playerInfo['gameStat']) ? $playerInfo['gameStat']['goals'] : 0 }}</td>
                     <td class="px-6 py-4 whitespace-nowrap">{{ isset($playerInfo['gameStat']) ? $playerInfo['gameStat']['assists'] : 0 }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">{{ $player['newPrice'] ?? 0 }}</td>
                 </tr>
             @endforeach
             </tbody>

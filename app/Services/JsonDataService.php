@@ -56,9 +56,14 @@ class JsonDataService implements JsonDataInterface
         return $roles;
     }
 
-    public function getPrices(string $file): array
+    public function getPrices(?string $file): array
     {
         $prices = [];
+
+        if (is_null($file)) {
+            return $prices;
+        }
+
         foreach ($this->getSeasonData($file) as $player) {
             $prices[] = $player['player']['price'];
         }

@@ -28,6 +28,9 @@ class LastSeasonStats extends Component
 
     public string $search = '';
 
+    public float $minPrice = 0;
+    public float $maxPrice = 100;
+
     private LeagueInterface $leagueService;
 
     private JsonDataInterface $jsonData;
@@ -69,17 +72,31 @@ class LastSeasonStats extends Component
         $playersData = null;
         $teamsData = null;
         $rolesData = null;
-        $pricesData = null;
+        $pricesData = [];
 
         if (!empty($this->league)) {
             $leagueFile = $this->leagueService->getFileByLeague($this->league);
 
             if ($leagueFile !== null) {
+                $startingFile = $this->startingData
+                    ->getFileByLeague($this->league);
+
                 $playersData = $this->jsonData
                     ->getData($leagueFile);
 
+                if (!is_null($startingFile)) {
+                    $playersData = $this->startingData
+                        ->addNewPrice($playersData, $startingFile);
+                }
+
                 $playersData = $this->filtrationData
-                    ->handler($playersData, $this->team, $this->role);
+                    ->handler(
+                        $playersData,
+                        $this->team,
+                        $this->role,
+                        $this->minPrice,
+                        $this->maxPrice
+                    );
 
                 if ($this->search !== "") {
                     $playersData = $this->searchService
@@ -100,9 +117,6 @@ class LastSeasonStats extends Component
                 $rolesData = $this->jsonData
                     ->getRoles($leagueFile);
 
-                $startingFile = $this->startingData
-                    ->getFileByLeague($this->league);
-
                 $pricesData = $this->jsonData
                     ->getPrices($startingFile);
             }
@@ -113,6 +127,10 @@ class LastSeasonStats extends Component
 
     private function buildView($playersData, $teamsData, $rolesData, $pricesData) : View
     {
+        $pricesDataDesc = $pricesData;
+
+        rsort($pricesDataDesc, SORT_NUMERIC);
+
         return view(
             'livewire.last-season-stats',
             [
@@ -122,6 +140,7 @@ class LastSeasonStats extends Component
                 'teams' => $teamsData,
                 'roles' => $rolesData,
                 'prices' => $pricesData,
+                'pricesDesc' => $pricesDataDesc,
             ]
         );
     }

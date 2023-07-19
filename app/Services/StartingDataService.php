@@ -6,6 +6,7 @@ namespace App\Services;
 
 use App\Contracts\StartingDataInterface;
 use Illuminate\Filesystem\FilesystemAdapter;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 
 class StartingDataService implements StartingDataInterface
@@ -21,11 +22,6 @@ class StartingDataService implements StartingDataInterface
         $this->storage = Storage::disk(static::DISK_NAME);
     }
 
-    public function getPriceByPlayer(string $player, string $league): int
-    {
-        // TODO: Implement getPriceByPlayer() method.
-    }
-
     public function getFileByLeague(string $league): ?string
     {
         return $this->storage->get($this->preparePath($league));
@@ -38,5 +34,36 @@ class StartingDataService implements StartingDataInterface
             static::DIRECTORY_NAME,
             strtolower($league),
         );
+    }
+
+    public function addNewPrice(Collection $data, string $newFile): Collection
+    {
+        $newData = collect($this->getData($newFile));
+
+        foreach ($data as $key => $item) {
+            $name = $item['player']['name'];
+
+            $foundData = $newData->filter(function ($player) use ($name) {
+                $playerName = mb_strtolower($player['player']['name']);
+                $search = mb_strtolower($name);
+
+                return $playerName === $search;
+            });
+
+//            if (!$foundData->isEmpty()) {
+                $newPrice = $foundData->values()->toArray() ? $foundData->values()->toArray()[0]['player']['price'] : 0;
+                $data[$key] = array_merge($data[$key], ['newPrice' => $newPrice]);
+//            }
+        }
+
+        return $data;
+    }
+
+    private function getData(string $file): array
+    {
+        $dataFromFile = json_decode($file, true );
+        $seasonData = end($dataFromFile['data']);
+
+        return $seasonData['season']['players']['list'];
     }
 }
