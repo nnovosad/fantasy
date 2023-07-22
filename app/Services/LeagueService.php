@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Storage;
 
 class LeagueService implements LeagueInterface
 {
-    private const DISK_NAME = 'local';
+    private const DISK_NAME = 's3';
 
     private const DIRECTORY_NAME = 'fantasy-data/completed/22-23';
 

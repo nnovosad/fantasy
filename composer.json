@@ -10,6 +10,8 @@
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.2",
         "laravel/tinker": "^2.8",
+        "laravel/vapor-cli": "^1.58",
+        "laravel/vapor-core": "^2.31",
         "livewire/livewire": "^2.12"
     },
     "require-dev": {

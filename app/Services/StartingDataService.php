@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Storage;
 
 class StartingDataService implements StartingDataInterface
 {
-    private const DISK_NAME = 'local';
+    private const DISK_NAME = 's3';
 
     private const DIRECTORY_NAME = 'fantasy-data/starting/23-24';
 
