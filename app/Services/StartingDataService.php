@@ -5,21 +5,25 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Contracts\StartingDataInterface;
-use Illuminate\Filesystem\FilesystemAdapter;
+use Illuminate\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class StartingDataService implements StartingDataInterface
 {
     private const DISK_NAME = 's3';
-
     private const DIRECTORY_NAME = 'fantasy-data/starting/23-24';
+    private const PRICE_FIELD = 'newPrice';
+    private const PLAYER_FIELD = 'player';
+    private const NAME_FIELD = 'name';
+    private const PRICE_FIELD_D = 'price';
 
-    private FilesystemAdapter $storage;
+    private FilesystemContract $storage;
 
     public function __construct()
     {
-        $this->storage = Storage::disk(static::DISK_NAME);
+        $this->storage = Storage::disk(self::DISK_NAME);
     }
 
     public function getFileByLeague(string $league): ?string
@@ -29,41 +33,39 @@ class StartingDataService implements StartingDataInterface
 
     private function preparePath(string $league): string
     {
-        return sprintf(
-            '%s/%s.json',
-            static::DIRECTORY_NAME,
-            strtolower($league),
-        );
+        return sprintf('%s/%s.json', self::DIRECTORY_NAME, Str::lower($league));
     }
 
     public function addNewPrice(Collection $data, string $newFile): Collection
     {
-        $newData = collect($this->getData($newFile));
+        return $data->map(function ($item, $key) use ($newFile) {
+            $playerName = $item[self::PLAYER_FIELD][self::NAME_FIELD];
+            $newPrice = $this->getNewPriceForPlayer($playerName, $this->getData($newFile));
 
-        foreach ($data as $key => $item) {
-            $name = $item['player']['name'];
+            return array_merge($item, [self::PRICE_FIELD => $newPrice]);
+        });
+    }
 
-            $foundData = $newData->filter(function ($player) use ($name) {
-                $playerName = mb_strtolower($player['player']['name']);
-                $search = mb_strtolower($name);
+    private function getNewPriceForPlayer(string $playerName, array $data) : float
+    {
+        $foundPlayer = $this->findPlayerInData($playerName, $data);
 
-                return $playerName === $search;
-            });
+        return $foundPlayer ? $foundPlayer[self::PLAYER_FIELD][self::PRICE_FIELD_D] : 0;
+    }
 
-//            if (!$foundData->isEmpty()) {
-                $newPrice = $foundData->values()->toArray() ? $foundData->values()->toArray()[0]['player']['price'] : 0;
-                $data[$key] = array_merge($data[$key], ['newPrice' => $newPrice]);
-//            }
-        }
+    private function findPlayerInData(string $playerName, array $data): ?array
+    {
+        $normalizedPlayerName = Str::lower($playerName);
 
-        return $data;
+        return collect($data)->first(function ($player) use ($normalizedPlayerName){
+            return Str::lower($player[self::PLAYER_FIELD][self::NAME_FIELD]) === $normalizedPlayerName;
+        });
     }
 
     private function getData(string $file): array
     {
-        $dataFromFile = json_decode($file, true );
-        $seasonData = end($dataFromFile['data']);
+        $dataFromFile = json_decode($file, true);
 
-        return $seasonData['season']['players']['list'];
+        return end($dataFromFile['data'])['season']['players']['list'];
     }
 }

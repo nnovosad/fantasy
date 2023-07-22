@@ -16,39 +16,45 @@ class JsonDataService implements JsonDataInterface
         'FORWARD',
     ];
 
-    private function getSeasonData(?string $file): array
+    private function getDecodedJsonData(?string $file): array
     {
-        $dataFromFile = json_decode($file, true );
+        $dataFromFile = json_decode($file, true);
         $seasonData = end($dataFromFile['data']);
         return $seasonData['season']['players']['list'];
     }
 
     public function getData(string $file): Collection
     {
-        return collect($this->getSeasonData($file));
+        return collect($this->getDecodedJsonData($file));
     }
 
     public function getTeams(string $file): array
     {
-        $teams = [];
-        foreach ($this->getSeasonData($file) as $player) {
-            $teams[] = $player['player']['team']['name'];
-        }
+        $teams = array_map(fn ($player) => $player['player']['team']['name'], $this->getDecodedJsonData($file));
 
-        $teams = array_unique($teams);
-
-        sort($teams);
-
-        return $teams;
+        return $this->sortAndUniqueArray($teams);
     }
 
     public function getRoles(string $file): array
     {
-        $roles = [];
-        foreach ($this->getSeasonData($file) as $player) {
-            $roles[] = $player['player']['role'];
+        $roles = array_map(fn ($player) => $player['player']['role'], $this->getDecodedJsonData($file));
+
+        return $this->uniqueAndSortRoles($roles);
+    }
+
+    public function getPrices(?string $file): array
+    {
+        if (is_null($file)) {
+            return [];
         }
 
+        $prices = array_map(fn ($player) => $player['player']['price'], $this->getDecodedJsonData($file));
+
+        return $this->sortAndUniqueArray($prices);
+    }
+
+    private function uniqueAndSortRoles(array $roles): array
+    {
         $roles = array_unique($roles);
 
         usort($roles, fn($a, $b) => array_search($a, static::PATTERN_ROLES) <=> array_search($b, static::PATTERN_ROLES));
@@ -56,22 +62,12 @@ class JsonDataService implements JsonDataInterface
         return $roles;
     }
 
-    public function getPrices(?string $file): array
+    private function sortAndUniqueArray(array $data): array
     {
-        $prices = [];
+        $data = array_unique($data);
 
-        if (is_null($file)) {
-            return $prices;
-        }
+        sort($data);
 
-        foreach ($this->getSeasonData($file) as $player) {
-            $prices[] = $player['player']['price'];
-        }
-
-        $prices = array_unique($prices);
-
-        sort($prices);
-
-        return $prices;
+        return $data;
     }
 }

@@ -5,29 +5,25 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Contracts\LeagueInterface;
-use Illuminate\Filesystem\FilesystemAdapter;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Contracts\Filesystem\Factory as StorageFactory;
+use Illuminate\Contracts\Filesystem\Filesystem as FilesystemAdapter;
 
 class LeagueService implements LeagueInterface
 {
     private const DISK_NAME = 's3';
-
     private const DIRECTORY_NAME = 'fantasy-data/completed/22-23';
 
-    /** @var FilesystemAdapter $storage */
     private FilesystemAdapter $storage;
 
-    public function __construct()
+    public function __construct(StorageFactory $storageFactory)
     {
-        $this->storage = Storage::disk(static::DISK_NAME);
+        $this->storage = $storageFactory->disk(self::DISK_NAME);
     }
 
     public function getCountries(): array
     {
-        $countries = array_map(function ($file) {
-            return $this->prepareCountryName($file);
-        }, $this->getFiles());
-
+        $files = $this->getFiles();
+        $countries = array_map([$this, 'prepareCountryName'], $files);
         sort($countries);
 
         return $countries;
@@ -35,14 +31,12 @@ class LeagueService implements LeagueInterface
 
     private function prepareCountryName(string $file): string
     {
-        return ucfirst(
-            pathinfo(basename($file), PATHINFO_FILENAME),
-        );
+        return ucfirst(pathinfo(basename($file), PATHINFO_FILENAME));
     }
 
     private function getFiles(): array
     {
-        return $this->storage->files(static::DIRECTORY_NAME);
+        return $this->storage->files(self::DIRECTORY_NAME);
     }
 
     public function getFileByLeague(string $league): ?string
@@ -52,10 +46,6 @@ class LeagueService implements LeagueInterface
 
     private function preparePath(string $league): string
     {
-        return sprintf(
-            '%s/%s.json',
-            static::DIRECTORY_NAME,
-            strtolower($league),
-        );
+        return sprintf('%s/%s.json', self::DIRECTORY_NAME, strtolower($league));
     }
 }

@@ -11,11 +11,11 @@ class SearchDataService implements SearchDataInterface
 {
     public function search(Collection $data, string $search): Collection
     {
+        $search = mb_strtolower($search);
+
         return $data->filter(function ($item) use ($search) {
             $playerName = mb_strtolower($item['player']['name']);
-            $search = mb_strtolower($search);
-
-            return stripos($playerName, $search) !== false;
+            return str_contains($playerName, $search);
         });
     }
 }
