@@ -22,8 +22,8 @@ class LastSeasonStats extends Component
     public string $team = '';
     public string $role = '';
     public string $orderColumn = '';
-    public string $sortOrder = 'desc';
-    public string $sortLink = '<i class="sorticon fa-solid fa-caret-up"></i>';
+    public string $sortOrder = 'asc';
+    public string $sortLink = '<i class="sorticon fa-solid fa-caret-down"></i>';
     public string $search = '';
     public float $minPrice = 0;
     public float $maxPrice = 100;
@@ -125,17 +125,27 @@ class LastSeasonStats extends Component
 
     public function changeLeague(): void
     {
-        $this->redirect(route('stats', ['league' => $this->league, 'team' => '', 'role' => '',]));
+        $this->redirect(route('stats', ['league' => $this->league]));
     }
 
     public function changeFilter(): void
     {
-        $this->redirect(route('stats', ['team' => $this->team, 'league' => $this->league, 'role' => $this->role]));
+        $routeParameters = ['league' => $this->league];
+
+        if (!empty($this->team)) {
+            $routeParameters['team'] = $this->team;
+        }
+
+        if (!empty($this->role)) {
+            $routeParameters['role'] = $this->role;
+        }
+
+        $this->redirect(route('stats', $routeParameters));
     }
 
     public function sortOrder($columnName = ""): void
     {
-        $this->sortOrder = $this->sortOrder == 'asc' ? 'desc' : 'asc';
+        $this->sortOrder = $this->sortOrder == 'desc' ? 'asc' : 'desc';
 
         $this->sortLink = '<i class="sorticon fa-solid fa-caret-' . ($this->sortOrder == 'asc' ? 'up' : 'down') . '"></i>';
         $this->orderColumn = $columnName;

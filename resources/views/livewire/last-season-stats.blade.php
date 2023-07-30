@@ -72,6 +72,7 @@
             </div>
         @endif
 
+        @if($players->count() > 0)
         <table class="min-w-full divide-y divide-gray-200">
             <thead>
             <tr>
@@ -132,6 +133,12 @@
             </tbody>
         </table>
 
-        {{ $players->links('pagination-links') }}
+            {{ $players->links('pagination-links') }}
+
+            @else
+            <div class="w-full p-5 text-center text-gray-600 bg-red-100 mt-4 shadow-lg rounded-lg">
+                <h2 class="font-bold text-2xl">No players data available.</h2>
+            </div>
+        @endif
     @endif
 </div>
