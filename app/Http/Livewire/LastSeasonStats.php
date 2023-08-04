@@ -71,12 +71,11 @@ class LastSeasonStats extends Component
         $startingFile = $this->startingData->getFileByLeague($this->league);
 
         $playersData = $leagueFile ? $this->jsonData->getData($leagueFile) : null;
-        $startingFileData = $startingFile ? $this->jsonData->getData($startingFile) : null;
 
-        $playersData = $this->preparePlayerData($playersData, $startingFileData);
+        $playersData = $this->preparePlayerData($playersData, $startingFile);
         $teamsData = $leagueFile ? $this->jsonData->getTeams($leagueFile) : null;
         $rolesData = $leagueFile ? $this->jsonData->getRoles($leagueFile) : null;
-        $pricesData = $startingFileData ? $this->jsonData->getPrices($startingFileData) : [];
+        $pricesData = $this->jsonData->getPrices($startingFile);
 
         return $this->buildView($playersData, $teamsData, $rolesData, $pricesData);
     }

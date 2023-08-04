@@ -16,16 +16,16 @@ class JsonDataService implements JsonDataInterface
         'FORWARD',
     ];
 
+    public function getData(string $file): Collection
+    {
+        return collect($this->getDecodedJsonData($file));
+    }
+
     private function getDecodedJsonData(?string $file): array
     {
         $dataFromFile = json_decode($file, true);
         $seasonData = end($dataFromFile['data']);
         return $seasonData['season']['players']['list'];
-    }
-
-    public function getData(string $file): Collection
-    {
-        return collect($this->getDecodedJsonData($file));
     }
 
     public function getTeams(string $file): array
