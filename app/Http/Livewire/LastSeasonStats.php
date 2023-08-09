@@ -118,8 +118,14 @@ class LastSeasonStats extends Component
                 'roles' => $rolesData,
                 'prices' => $pricesData,
                 'pricesDesc' => $pricesDataDesc,
+                'is_filter_by_price' => $this->isFilterByPrice(),
             ]
         );
+    }
+
+    private function isFilterByPrice(): bool
+    {
+        return $this->minPrice != 0 || $this->maxPrice != 100;
     }
 
     public function changeLeague(): void

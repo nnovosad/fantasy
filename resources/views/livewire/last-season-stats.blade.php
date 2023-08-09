@@ -71,12 +71,19 @@
                 </div>
             </div>
 
-            <div wire:loading wire:target="minPrice,maxPrice,changeFilter,changeLeague">
+            @if($is_filter_by_price)
                 <div class="w-full mb-4 p-5 text-center text-gray-600 bg-green-50 mt-4 shadow-lg rounded-lg">
-                    Data processing...
+                    Выбрана фильтрация с учетом цены сезона 23/24 поэтому не будут отображаться игроки которые покинули лигу. <br/>
+                    Для отображения всех футболистов нажмите, пожалуйста, Reset Filters
                 </div>
-            </div>
+            @endif
         @endif
+
+        <div wire:loading wire:target="minPrice,maxPrice,changeFilter,changeLeague,resetFilters">
+            <div class="w-full mb-4 p-5 text-center text-gray-600 bg-green-50 mt-4 shadow-lg rounded-lg">
+                Data processing...
+            </div>
+        </div>
 
         @if($players->count() > 0)
         <table class="min-w-full divide-y divide-gray-200">

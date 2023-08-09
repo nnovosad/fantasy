@@ -26,6 +26,10 @@ class FiltrationDataService implements FiltrationDataInterface
 
     private function filterByPrice(Collection $data, float $minPrice, float $maxPrice): Collection
     {
+        if ($maxPrice != 100) {
+            $minPrice = 1;
+        }
+
         return $data->filter(function ($item) use ($minPrice, $maxPrice) {
             return !isset($item['newPrice']) || ($item['newPrice'] >= $minPrice && $item['newPrice'] <= $maxPrice);
         });
