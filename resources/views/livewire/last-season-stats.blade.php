@@ -70,6 +70,12 @@
                     </select>
                 </div>
             </div>
+
+            <div wire:loading wire:target="minPrice,maxPrice,changeFilter,changeLeague">
+                <div class="w-full mb-4 p-5 text-center text-gray-600 bg-green-50 mt-4 shadow-lg rounded-lg">
+                    Data processing...
+                </div>
+            </div>
         @endif
 
         @if($players->count() > 0)
