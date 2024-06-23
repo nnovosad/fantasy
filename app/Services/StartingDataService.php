@@ -12,7 +12,6 @@ use Illuminate\Support\Str;
 
 class StartingDataService implements StartingDataInterface
 {
-    private const DISK_NAME = 's3';
     private const DIRECTORY_NAME = 'fantasy-data/starting/23-24';
     private const PRICE_FIELD = 'newPrice';
     private const PLAYER_FIELD = 'player';
@@ -23,7 +22,7 @@ class StartingDataService implements StartingDataInterface
 
     public function __construct()
     {
-        $this->storage = Storage::disk(self::DISK_NAME);
+        $this->storage = Storage::disk('local');
     }
 
     public function getFileByLeague(string $league): ?string
