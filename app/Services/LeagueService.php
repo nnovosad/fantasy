@@ -10,14 +10,13 @@ use Illuminate\Contracts\Filesystem\Filesystem as FilesystemAdapter;
 
 class LeagueService implements LeagueInterface
 {
-    private const DISK_NAME = 's3';
     private const DIRECTORY_NAME = 'fantasy-data/completed/22-23';
 
     private FilesystemAdapter $storage;
 
     public function __construct(StorageFactory $storageFactory)
     {
-        $this->storage = $storageFactory->disk(self::DISK_NAME);
+        $this->storage = $storageFactory->disk('local');
     }
 
     public function getCountries(): array

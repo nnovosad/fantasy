@@ -24,3 +24,5 @@ Homestead.json
 .vapor/
 .env.production
 .env.staging
+
+.idea
