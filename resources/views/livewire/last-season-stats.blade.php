@@ -52,7 +52,7 @@
             <div class="mb-4 space-x-4 flex flex-wrap items-center">
                 <div class="flex items-center mr-4">
                     <label for="min-price" class="text-gray-700 text-sm font-bold mr-2">From</label>
-                    <select id="min-price" wire:model="minPrice"
+                    <select id="min-price" wire:model="minPrice" wire:change="changeFilter"
                             class="block w-48 px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
                         @foreach($prices as $price)
                             <option value="{{ $price }}">{{ $price }}</option>
@@ -62,7 +62,7 @@
 
                 <div class="flex items-center">
                     <label for="max-price" class="text-gray-700 text-sm font-bold mr-2">To</label>
-                    <select id="max-price" wire:model="maxPrice"
+                    <select id="max-price" wire:model="maxPrice" wire:change="changeFilter"
                             class="block w-48 px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
                         @foreach($pricesDesc as $price)
                             <option value="{{ $price }}">{{ $price }}</option>

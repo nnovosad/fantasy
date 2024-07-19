@@ -56,6 +56,8 @@ class LastSeasonStats extends Component
         $this->league = request()->query('league', '');
         $this->team = request()->query('team', '');
         $this->role = request()->query('role', '');
+        $this->minPrice = request()->query('minPrice', 0);
+        $this->maxPrice = request()->query('maxPrice', 100);
     }
 
     public function render(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
@@ -143,6 +145,14 @@ class LastSeasonStats extends Component
 
         if (!empty($this->role)) {
             $routeParameters['role'] = $this->role;
+        }
+
+        if (!empty($this->minPrice)) {
+            $routeParameters['minPrice'] = $this->minPrice;
+        }
+
+        if (!empty($this->maxPrice)) {
+            $routeParameters['maxPrice'] = $this->maxPrice;
         }
 
         $this->redirect(route('stats', $routeParameters));
