@@ -16,7 +16,7 @@ use Livewire\Component;
 
 class LastSeasonStats extends Component
 {
-    private const PAGINATION_COUNT = 15;
+    private const PAGINATION_COUNT = 15000;
 
     public string $league = '';
     public string $team = '';

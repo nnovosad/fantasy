@@ -12,7 +12,7 @@ use Illuminate\Support\Str;
 
 class StartingDataService implements StartingDataInterface
 {
-    private const DIRECTORY_NAME = 'fantasy-data/starting/23-24';
+    private const DIRECTORY_NAME = 'fantasy-data/starting/24-25';
     private const PRICE_FIELD = 'newPrice';
     private const PLAYER_FIELD = 'player';
     private const NAME_FIELD = 'name';
