@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Contracts\ConverterInterface;
 use App\Contracts\FiltrationDataInterface;
 use App\Contracts\JsonDataInterface;
 use App\Contracts\LeagueInterface;
 use App\Contracts\SearchDataInterface;
 use App\Contracts\SortingDataInterface;
 use App\Contracts\StartingDataInterface;
+use App\Services\ConverterService;
 use App\Services\FiltrationDataService;
 use App\Services\JsonDataService;
 use App\Services\LeagueService;
@@ -34,6 +36,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(SortingDataInterface::class, SortingDataService::class);
         $this->app->singleton(SearchDataInterface::class, SearchDataService::class);
         $this->app->singleton(StartingDataInterface::class, StartingDataService::class);
+
+        $this->app->singleton(ConverterInterface::class, ConverterService::class);
     }
 
     /**
