@@ -21,6 +21,35 @@ class ConverterService implements ConverterInterface
     {
         $completedDataFile = $this->getFile($league, 'completed/23-24');
         $startingDataFile = $this->getFile($league, 'starting/24-25');
+
+        $completedDataFile = json_decode($completedDataFile, true);
+        $completedDataFile = end($completedDataFile['data']);
+        $completedDataFile = $completedDataFile['season']['players']['list'];
+
+        $startingDataFile = json_decode($startingDataFile, true);
+        $startingDataFile = end($startingDataFile['data']);
+        $startingDataFile = $startingDataFile['season']['players']['list'];
+
+        $preparedData = [];
+
+        foreach ($completedDataFile as $data) {
+            $playerName = $data['player']['name'];
+
+            $searchedPlayerData = $this->searchPlayer($startingDataFile, $playerName);
+            if (!$searchedPlayerData) {
+                continue;
+            }
+
+            $newPrice = $searchedPlayerData['player']['price'];
+            $data['player']['price'] = $newPrice;
+
+            $data['player']['team']['name'] = $searchedPlayerData['player']['team']['name'];
+            $data['player']['role'] = $searchedPlayerData['player']['role'];
+
+            $preparedData[] = $data;
+        }
+
+        $this->putData($preparedData, $league);
     }
 
     private function getFile(string $league, string $path): string
@@ -31,5 +60,18 @@ class ConverterService implements ConverterInterface
     private function preparePath(string $league, string $path): string
     {
         return sprintf('%s/%s/%s.json', self::DIRECTORY_NAME, $path, strtolower($league));
+    }
+
+    private function searchPlayer(array $data, string $value): ?array
+    {
+        return collect($data)->firstWhere('player.name', $value);
+    }
+
+    private function putData(array $data, string $league): void
+    {
+        $jsonData = json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+        $file = sprintf('%s/%s/%s.json', self::DIRECTORY_NAME, 'converted/24-25', strtolower($league));
+
+        $this->storage->put($file, $jsonData);
     }
 }
