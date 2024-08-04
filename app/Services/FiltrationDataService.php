@@ -31,7 +31,7 @@ class FiltrationDataService implements FiltrationDataInterface
         }
 
         return $data->filter(function ($item) use ($minPrice, $maxPrice) {
-            return !isset($item['newPrice']) || ($item['newPrice'] >= $minPrice && $item['newPrice'] <= $maxPrice);
+            return !isset($item['player']['price']) || ($item['player']['price'] >= $minPrice && $item['player']['price'] <= $maxPrice);
         });
     }
 

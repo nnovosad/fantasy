@@ -70,13 +70,6 @@
                     </select>
                 </div>
             </div>
-
-            @if($is_filter_by_price)
-                <div class="w-full mb-4 p-5 text-center text-gray-600 bg-green-50 mt-4 shadow-lg rounded-lg">
-                    Выбрана фильтрация с учетом цены сезона 23/24 поэтому не будут отображаться игроки которые покинули лигу. <br/>
-                    Для отображения всех футболистов нажмите, пожалуйста, Reset Filters
-                </div>
-            @endif
         @endif
 
         <div wire:loading wire:target="minPrice,maxPrice,changeFilter,changeLeague,resetFilters">
@@ -121,7 +114,7 @@
                 </th>
                 <th scope="col"
                     class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    New Price
+                    Price
                 </th>
             </tr>
             </thead>
@@ -140,7 +133,7 @@
                     <td class="px-6 py-4 whitespace-nowrap">{{ $playerInfo['seasonScoreInfo']['score'] }}</td>
                     <td class="px-6 py-4 whitespace-nowrap">{{ isset($playerInfo['gameStat']) ? $playerInfo['gameStat']['goals'] : 0 }}</td>
                     <td class="px-6 py-4 whitespace-nowrap">{{ isset($playerInfo['gameStat']) ? $playerInfo['gameStat']['assists'] : 0 }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap">{{ $player['newPrice'] ?? 0 }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">{{ $playerInfo['price'] ?? 0 }}</td>
                 </tr>
             @endforeach
             </tbody>

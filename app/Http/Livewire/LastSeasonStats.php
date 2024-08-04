@@ -7,7 +7,6 @@ use App\Contracts\JsonDataInterface;
 use App\Contracts\LeagueInterface;
 use App\Contracts\SearchDataInterface;
 use App\Contracts\SortingDataInterface;
-use App\Contracts\StartingDataInterface;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
@@ -16,7 +15,7 @@ use Livewire\Component;
 
 class LastSeasonStats extends Component
 {
-    private const PAGINATION_COUNT = 15000;
+    private const PAGINATION_COUNT = 15;
 
     public string $league = '';
     public string $team = '';
@@ -33,22 +32,19 @@ class LastSeasonStats extends Component
     private FiltrationDataInterface $filtrationData;
     private SortingDataInterface $sortingData;
     private SearchDataInterface $searchService;
-    private StartingDataInterface $startingData;
 
     public function boot(
         LeagueInterface $leagueService,
         JsonDataInterface $jsonData,
         FiltrationDataInterface $filtrationData,
         SortingDataInterface $sortingData,
-        SearchDataInterface $searchService,
-        StartingDataInterface $startingData
+        SearchDataInterface $searchService
     ) {
         $this->leagueService = $leagueService;
         $this->jsonData = $jsonData;
         $this->filtrationData = $filtrationData;
         $this->sortingData = $sortingData;
         $this->searchService = $searchService;
-        $this->startingData = $startingData;
     }
 
     public function mount(): void
@@ -70,24 +66,19 @@ class LastSeasonStats extends Component
     private function prepareViewWithData(): View
     {
         $leagueFile = $this->leagueService->getFileByLeague($this->league);
-        $startingFile = $this->startingData->getFileByLeague($this->league);
 
         $playersData = $leagueFile ? $this->jsonData->getData($leagueFile) : null;
 
-        $playersData = $this->preparePlayerData($playersData, $startingFile);
+        $playersData = $this->preparePlayerData($playersData, $leagueFile);
         $teamsData = $leagueFile ? $this->jsonData->getTeams($leagueFile) : null;
         $rolesData = $leagueFile ? $this->jsonData->getRoles($leagueFile) : null;
-        $pricesData = $this->jsonData->getPrices($startingFile);
+        $pricesData = $this->jsonData->getPrices($leagueFile);
 
         return $this->buildView($playersData, $teamsData, $rolesData, $pricesData);
     }
 
     private function preparePlayerData($playersData, $startingFileData)
     {
-        if ($playersData && $startingFileData) {
-            $playersData = $this->startingData->addNewPrice($playersData, $startingFileData);
-        }
-
         if ($playersData) {
             $playersData = $this->filtrationData->handler($playersData, $this->team, $this->role, $this->minPrice, $this->maxPrice);
         }
@@ -120,14 +111,8 @@ class LastSeasonStats extends Component
                 'roles' => $rolesData,
                 'prices' => $pricesData,
                 'pricesDesc' => $pricesDataDesc,
-                'is_filter_by_price' => $this->isFilterByPrice(),
             ]
         );
-    }
-
-    private function isFilterByPrice(): bool
-    {
-        return $this->minPrice != 0 || $this->maxPrice != 100;
     }
 
     public function changeLeague(): void

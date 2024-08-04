@@ -23,9 +23,7 @@ class JsonDataService implements JsonDataInterface
 
     private function getDecodedJsonData(?string $file): array
     {
-        $dataFromFile = json_decode($file, true);
-        $seasonData = end($dataFromFile['data']);
-        return $seasonData['season']['players']['list'];
+        return json_decode($file, true);
     }
 
     public function getTeams(string $file): array

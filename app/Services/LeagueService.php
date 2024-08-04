@@ -10,7 +10,7 @@ use Illuminate\Contracts\Filesystem\Filesystem as FilesystemAdapter;
 
 class LeagueService implements LeagueInterface
 {
-    private const DIRECTORY_NAME = 'fantasy-data/completed/23-24';
+    private const DIRECTORY_NAME = 'fantasy-data/converted/24-25';
 
     private FilesystemAdapter $storage;
 

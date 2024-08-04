@@ -69,7 +69,7 @@ class ConverterService implements ConverterInterface
 
     private function putData(array $data, string $league): void
     {
-        $jsonData = json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+        $jsonData = json_encode($data, JSON_UNESCAPED_UNICODE);
         $file = sprintf('%s/%s/%s.json', self::DIRECTORY_NAME, 'converted/24-25', strtolower($league));
 
         $this->storage->put($file, $jsonData);
