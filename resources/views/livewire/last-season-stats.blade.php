@@ -35,7 +35,7 @@
                 <input
                     type="text"
                     placeholder="Search Players"
-                    wire:model.debounce.250ms="search"
+                    wire:model.debounce.450ms="search"
                     class="block w-48 px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                 />
             </label>
@@ -99,8 +99,9 @@
                     Role
                 </th>
                 <th scope="col"
-                    class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Total Score
+                    class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    wire:click="sortOrder('score')">
+                    Total Score {!! $sortLink !!}
                 </th>
                 <th scope="col"
                     class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"

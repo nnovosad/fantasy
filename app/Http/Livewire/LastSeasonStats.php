@@ -15,7 +15,7 @@ use Livewire\Component;
 
 class LastSeasonStats extends Component
 {
-    private const PAGINATION_COUNT = 15;
+    private const DEFAULT_PAGINATION_COUNT = 15000;
 
     public string $league = '';
     public string $team = '';
@@ -69,7 +69,7 @@ class LastSeasonStats extends Component
 
         $playersData = $leagueFile ? $this->jsonData->getData($leagueFile) : null;
 
-        $playersData = $this->preparePlayerData($playersData, $leagueFile);
+        $playersData = $this->preparePlayerData($playersData);
         $teamsData = $leagueFile ? $this->jsonData->getTeams($leagueFile) : null;
         $rolesData = $leagueFile ? $this->jsonData->getRoles($leagueFile) : null;
         $pricesData = $this->jsonData->getPrices($leagueFile);
@@ -77,10 +77,17 @@ class LastSeasonStats extends Component
         return $this->buildView($playersData, $teamsData, $rolesData, $pricesData);
     }
 
-    private function preparePlayerData($playersData, $startingFileData)
+    private function preparePlayerData($playersData)
     {
         if ($playersData) {
-            $playersData = $this->filtrationData->handler($playersData, $this->team, $this->role, $this->minPrice, $this->maxPrice);
+            $playersData = $this->filtrationData
+                ->handler(
+                    $playersData,
+                    $this->team,
+                    $this->role,
+                    $this->minPrice,
+                    $this->maxPrice,
+                );
         }
 
         if ($playersData && $this->search !== "") {
@@ -92,7 +99,7 @@ class LastSeasonStats extends Component
         }
 
         if ($playersData) {
-            return $playersData->paginate(static::PAGINATION_COUNT)->withQueryString();
+            return $playersData->paginate(static::DEFAULT_PAGINATION_COUNT)->withQueryString();
         }
     }
 

@@ -9,10 +9,18 @@ use Illuminate\Support\Collection;
 
 class SortingDataService implements SortingDataInterface
 {
+    private const DEFAULT_SORT_VALUE = 0;
+
     public function sorting(Collection $data, string $orderColumn, string $sortOrder): Collection
     {
-        return $data->{$sortOrder === 'desc' ? 'sortByDesc' : 'sort'}(function ($item) use ($orderColumn) {
-            return $item['player']['gameStat'][$orderColumn] ?? 0;
+        $nestingColumn = 'gameStat';
+
+        if ($orderColumn === 'score') {
+            $nestingColumn = 'seasonScoreInfo';
+        }
+
+        return $data->{$sortOrder === 'desc' ? 'sortByDesc' : 'sortBy'}(function ($item) use ($orderColumn, $nestingColumn) {
+            return $item['player'][$nestingColumn][$orderColumn] ?? static::DEFAULT_SORT_VALUE;
         });
     }
 }
