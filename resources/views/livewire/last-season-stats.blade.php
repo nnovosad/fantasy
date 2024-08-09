@@ -15,7 +15,7 @@
 
         <div class="mb-4 flex space-x-4">
 
-            <select id="teams" wire:model="team" wire:change="changeFilter" wire:key="team"
+            <select id="teams" wire:model="team" wire:key="team"
                     class="block w-48 px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
                 <option value="">All Teams</option>
                 @foreach($teams as $team)
@@ -23,7 +23,7 @@
                 @endforeach
             </select>
 
-            <select id="roles" wire:model="role" wire:change="changeFilter" wire:key="role"
+            <select id="roles" wire:model="role" wire:key="role"
                     class="block w-48 px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
                 <option value="">All Roles</option>
                 @foreach($roles as $role)
@@ -52,7 +52,7 @@
             <div class="mb-4 space-x-4 flex flex-wrap items-center">
                 <div class="flex items-center mr-4">
                     <label for="min-price" class="text-gray-700 text-sm font-bold mr-2">From</label>
-                    <select id="min-price" wire:model="minPrice" wire:change="changeFilter"
+                    <select id="min-price" wire:model="minPrice"
                             class="block w-48 px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
                         @foreach($prices as $price)
                             <option value="{{ $price }}">{{ $price }}</option>
@@ -62,7 +62,7 @@
 
                 <div class="flex items-center">
                     <label for="max-price" class="text-gray-700 text-sm font-bold mr-2">To</label>
-                    <select id="max-price" wire:model="maxPrice" wire:change="changeFilter"
+                    <select id="max-price" wire:model="maxPrice"
                             class="block w-48 px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
                         @foreach($pricesDesc as $price)
                             <option value="{{ $price }}">{{ $price }}</option>
@@ -72,7 +72,7 @@
             </div>
         @endif
 
-        <div wire:loading wire:target="minPrice,maxPrice,changeFilter,changeLeague,resetFilters">
+        <div wire:loading wire:target="minPrice,maxPrice,changeLeague,resetFilters">
             <div class="w-full mb-4 p-5 text-center text-gray-600 bg-green-50 mt-4 shadow-lg rounded-lg">
                 Data processing...
             </div>
@@ -125,7 +125,6 @@
                     $playerInfo=$player['player'];
                     $rowNumber = ($players->currentPage() - 1) * $players->perPage() + $loop->iteration;
                 @endphp
-{{--                {{ dd($player) }}--}}
                 <tr class="{{ $loop->even ? 'bg-gray-100' : '' }}">
                     <td class="px-6 py-4 whitespace-nowrap">{{ $rowNumber }}</td>
                     <td class="px-6 py-4 whitespace-nowrap">{{ $playerInfo['name'] }}</td>
@@ -139,8 +138,6 @@
             @endforeach
             </tbody>
         </table>
-
-            {{ $players->links('pagination-links') }}
 
             @else
             <div class="w-full p-5 text-center text-gray-600 bg-red-100 mt-4 shadow-lg rounded-lg">

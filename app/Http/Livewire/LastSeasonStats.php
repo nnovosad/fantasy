@@ -127,29 +127,6 @@ class LastSeasonStats extends Component
         $this->redirect(route('stats', ['league' => $this->league]));
     }
 
-    public function changeFilter(): void
-    {
-        $routeParameters = ['league' => $this->league];
-
-        if (!empty($this->team)) {
-            $routeParameters['team'] = $this->team;
-        }
-
-        if (!empty($this->role)) {
-            $routeParameters['role'] = $this->role;
-        }
-
-        if (!empty($this->minPrice)) {
-            $routeParameters['minPrice'] = $this->minPrice;
-        }
-
-        if (!empty($this->maxPrice)) {
-            $routeParameters['maxPrice'] = $this->maxPrice;
-        }
-
-        $this->redirect(route('stats', $routeParameters));
-    }
-
     public function sortOrder($columnName = ""): void
     {
         $this->sortOrder = $this->sortOrder == 'desc' ? 'asc' : 'desc';
