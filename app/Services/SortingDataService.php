@@ -11,11 +11,16 @@ class SortingDataService implements SortingDataInterface
 {
     private const DEFAULT_SORT_VALUE = 0;
 
+    private const SCORE_INFO_COLUMN = [
+        'score',
+        'averageScore',
+    ];
+
     public function sorting(Collection $data, string $orderColumn, string $sortOrder): Collection
     {
         $nestingColumn = 'gameStat';
 
-        if ($orderColumn === 'score') {
+        if (in_array($orderColumn, static::SCORE_INFO_COLUMN)) {
             $nestingColumn = 'seasonScoreInfo';
         }
 
