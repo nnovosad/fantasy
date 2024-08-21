@@ -1,5 +1,5 @@
 <div class="container mx-auto p-4">
-    <h1 class="text-2xl font-bold mb-4">Season Statistics 23/24</h1>
+    <h1 class="text-2xl font-bold mb-4">Season Statistics 24/25</h1>
     <div class="w-64">
         <select id="leagues" wire:model="league" wire:change="changeLeague" wire:key="league"
                 class="block w-full px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
