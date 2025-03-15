@@ -1,7 +1,7 @@
 <div class="container mx-auto p-4">
     <h1 class="text-2xl font-bold mb-4">Season Statistics 24/25</h1>
     <div class="w-64">
-        <select id="leagues" wire:model="league" wire:change="changeLeague" wire:key="league"
+        <select id="leagues" wire:model.live="league" wire:change="changeLeague" wire:key="league"
                 class="block w-full px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
             <option>Select League</option>
             @foreach($leagues as $league)
@@ -15,7 +15,7 @@
 
         <div class="mb-4 flex space-x-4">
 
-            <select id="teams" wire:model="team" wire:key="team"
+            <select id="teams" wire:model.live="team" wire:key="team"
                     class="block w-48 px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
                 <option value="">All Teams</option>
                 @foreach($teams as $team)
@@ -23,7 +23,7 @@
                 @endforeach
             </select>
 
-            <select id="roles" wire:model="role" wire:key="role"
+            <select id="roles" wire:model.live="role" wire:key="role"
                     class="block w-48 px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
                 <option value="">All Roles</option>
                 @foreach($roles as $role)
@@ -35,7 +35,7 @@
                 <input
                     type="text"
                     placeholder="Search Players"
-                    wire:model.debounce.450ms="search"
+                    wire:model.live.debounce.450ms="search"
                     class="block w-48 px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                 />
             </label>
@@ -52,7 +52,7 @@
             <div class="mb-4 space-x-4 flex flex-wrap items-center">
                 <div class="flex items-center mr-4">
                     <label for="min-price" class="text-gray-700 text-sm font-bold mr-2">From</label>
-                    <select id="min-price" wire:model="minPrice"
+                    <select id="min-price" wire:model.live="minPrice"
                             class="block w-48 px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
                         @foreach($prices as $price)
                             <option value="{{ $price }}">{{ $price }}</option>
@@ -62,7 +62,7 @@
 
                 <div class="flex items-center">
                     <label for="max-price" class="text-gray-700 text-sm font-bold mr-2">To</label>
-                    <select id="max-price" wire:model="maxPrice"
+                    <select id="max-price" wire:model.live="maxPrice"
                             class="block w-48 px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
                         @foreach($pricesDesc as $price)
                             <option value="{{ $price }}">{{ $price }}</option>

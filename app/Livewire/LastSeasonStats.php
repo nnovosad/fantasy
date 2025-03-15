@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Livewire;
 
 use App\Contracts\FiltrationDataInterface;
 use App\Contracts\JsonDataInterface;
