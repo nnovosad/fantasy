@@ -1,0 +1,46 @@
+{
+  id_176935557: fantasyQueries {
+    season(input: {seasonID: "48", paginationPlayers: {sortType: BY_POINTS, sortOrder: DESC, pageSize: 1000000, pageNum: 1, priceFrom: 0, priceTo: 100}}) {
+      players {
+        list {
+          player {
+            id
+            name
+            price
+            role
+            statObject {
+              name
+              firstName
+              lastName
+            }
+            team {
+              id
+              name
+            }
+            seasonScoreInfo {
+              place
+              score
+              totalPlaces
+              averageScore
+            }
+            gameStat {
+              goals
+              assists
+              goalsConceded
+              yellowCards
+              redCards
+              fieldMinutes
+              saves
+            }
+          }
+        }
+        pageInfo {
+          firstPage
+          lastPage
+          currentPage
+          totalCount
+        }
+      }
+    }
+  }
+}

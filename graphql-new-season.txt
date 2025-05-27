@@ -1,0 +1,25 @@
+{
+  id_50746757: fantasyQueries {
+    season(input: {
+      seasonID: "26",
+      paginationPlayers: {
+        sortType: BY_POINTS,
+        sortOrder: DESC,
+        pageSize: 1000000, pageNum: 1,
+        priceFrom: 4.5,
+        priceTo: 9
+      }
+    }) {
+      players {
+        list {
+          player {
+            id
+            name
+            price
+            role
+          }
+        }
+      }
+    }
+  }
+}
