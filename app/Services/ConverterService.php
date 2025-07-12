@@ -19,8 +19,8 @@ class ConverterService implements ConverterInterface
 
     public function handler(string $league): void
     {
-        $completedDataFile = $this->getFile($league, 'completed/23-24');
-        $startingDataFile = $this->getFile($league, 'starting/24-25');
+        $completedDataFile = $this->getFile($league, 'completed/24-25');
+        $startingDataFile = $this->getFile($league, 'starting/25-26');
 
         $completedDataFile = json_decode($completedDataFile, true);
         $completedDataFile = end($completedDataFile['data']);
@@ -64,13 +64,13 @@ class ConverterService implements ConverterInterface
 
     private function searchPlayer(array $data, string $value): ?array
     {
-        return collect($data)->firstWhere('player.name', $value);
+            return collect($data)->firstWhere('player.name', $value);
     }
 
     private function putData(array $data, string $league): void
     {
         $jsonData = json_encode($data, JSON_UNESCAPED_UNICODE);
-        $file = sprintf('%s/%s/%s.json', self::DIRECTORY_NAME, 'converted/24-25', strtolower($league));
+        $file = sprintf('%s/%s/%s.json', self::DIRECTORY_NAME, 'converted/25-26', strtolower($league));
 
         $this->storage->put($file, $jsonData);
     }
