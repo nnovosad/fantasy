@@ -15,7 +15,7 @@
     <body class="h-screen flex items-center justify-center">
     <div class="bg-white p-8 rounded w-1/2">
         <p class="font-semibold text-xl mb-4">Привет</p>
-        <p class="mb-4"><a href="/stats" class="text-blue-500 underline">Здесь</a> можно перед фэнтези сезоном 24/25 на <a href="https://www.sports.ru/fantasy/football/" class="text-blue-500 underline" target="_blank">Sports.ru</a> посмотреть статистику за прошлый сезон 23/24.</p>
+        <p class="mb-4"><a href="/stats" class="text-blue-500 underline">Здесь</a> можно перед фэнтези сезоном 25/26 на <a href="https://www.sports.ru/fantasy/football/" class="text-blue-500 underline" target="_blank">Sports.ru</a> посмотреть статистику за прошлый сезон 24/25.</p>
     </div>
     </body>
 </html>

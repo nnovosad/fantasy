@@ -1,5 +1,5 @@
 <div class="container mx-auto p-4">
-    <h1 class="text-2xl font-bold mb-4">Season Statistics 24/25</h1>
+    <h1 class="text-2xl font-bold mb-4">Season Statistics 25/26</h1>
     <div class="w-64">
         <select id="leagues" wire:model.live="league" wire:change="changeLeague" wire:key="league"
                 class="block w-full px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
@@ -100,22 +100,22 @@
                 </th>
                 <th scope="col"
                     class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    wire:click="sortOrder('score')">
+                    wire:click="applySortOrder('score')">
                     Total Score {!! $sortLink !!}
                 </th>
                 <th scope="col"
                     class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    wire:click="sortOrder('averageScore')">
+                    wire:click="applySortOrder('averageScore')">
                     Av Score {!! $sortLink !!}
                 </th>
                 <th scope="col"
                     class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    wire:click="sortOrder('goals')">
+                    wire:click="applySortOrder('goals')">
                     Goal {!! $sortLink !!}
                 </th>
                 <th scope="col"
                     class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    wire:click="sortOrder('assists')">
+                    wire:click="applySortOrder('assists')">
                     Assists {!! $sortLink !!}
                 </th>
                 <th scope="col"

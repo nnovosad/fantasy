@@ -127,7 +127,7 @@ class LastSeasonStats extends Component
         $this->redirect(route('stats', ['league' => $this->league]));
     }
 
-    public function sortOrder($columnName = ""): void
+    public function applySortOrder($columnName = ""): void
     {
         $this->sortOrder = $this->sortOrder == 'desc' ? 'asc' : 'desc';
 
