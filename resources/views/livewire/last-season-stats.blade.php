@@ -118,6 +118,13 @@
                     wire:click="applySortOrder('assists')">
                     Assists {!! $sortLink !!}
                 </th>
+                @if($selected_role === 'goalkeeper')
+                    <th scope="col"
+                        class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        wire:click="applySortOrder('saves')">
+                        Saves {!! $sortLink !!}
+                    </th>
+                @endif
                 <th scope="col"
                     class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Price
@@ -139,6 +146,9 @@
                     <td class="px-6 py-4 whitespace-nowrap">{{ $playerInfo['seasonScoreInfo']['averageScore'] }}</td>
                     <td class="px-6 py-4 whitespace-nowrap">{{ isset($playerInfo['gameStat']) ? $playerInfo['gameStat']['goals'] : 0 }}</td>
                     <td class="px-6 py-4 whitespace-nowrap">{{ isset($playerInfo['gameStat']) ? $playerInfo['gameStat']['assists'] : 0 }}</td>
+                    @if($selected_role === 'goalkeeper')
+                        <td class="px-6 py-4 whitespace-nowrap">{{ isset($playerInfo['gameStat']) ? $playerInfo['gameStat']['saves'] : 0 }}</td>
+                    @endif
                     <td class="px-6 py-4 whitespace-nowrap">{{ $playerInfo['price'] ?? 0 }}</td>
                 </tr>
             @endforeach

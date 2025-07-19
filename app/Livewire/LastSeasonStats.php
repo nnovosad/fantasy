@@ -103,8 +103,12 @@ class LastSeasonStats extends Component
         }
     }
 
-    private function buildView(?LengthAwarePaginator $playersData, ?array $teamsData, ?array $rolesData, ?array $pricesData) : View
-    {
+    private function buildView(
+        ?LengthAwarePaginator $playersData,
+        ?array $teamsData,
+        ?array $rolesData,
+        ?array $pricesData
+    ): View {
         $pricesDataDesc = $pricesData;
         rsort($pricesDataDesc, SORT_NUMERIC);
 
@@ -118,6 +122,7 @@ class LastSeasonStats extends Component
                 'roles' => $rolesData,
                 'prices' => $pricesData,
                 'pricesDesc' => $pricesDataDesc,
+                'selected_role' => mb_strtolower($this->role),
             ]
         );
     }
