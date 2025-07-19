@@ -2,16 +2,18 @@
 
 namespace App\Services;
 
+use App\Contracts\AssistantNewSeasonInterface;
+use App\Contracts\LeagueInterface;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 
-class PlayerSelectionService
+class AssistantNewSeasonService implements AssistantNewSeasonInterface
 {
     /** Ролевые лимиты */
     private const ROLE_LIMITS = [
         'GOALKEEPER' => 2,
-        'FORWARD'    => 3,
-        'DEFENDER'   => 5,
+        'FORWARD' => 3,
+        'DEFENDER' => 5,
         'MIDFIELDER' => 5,
     ];
 
@@ -19,16 +21,21 @@ class PlayerSelectionService
     private Collection $team;            // выбранные игроки
     private array $roleCount = [];
     private array $teamCount = [];
-    private float $budget    = 0;
+    private float $budget = 0;
 
-    public function handle(): array
+    public function __construct(private readonly LeagueInterface $leagueService)
     {
-        $path = Storage::get('fantasy-data/converted/25-26/russia.json');
-        $this->allPlayers = collect(json_decode($path, true))
+    }
+
+    public function watson(string $league): array
+    {
+        $dataFile = $this->leagueService->getFileByLeague($league);
+
+        $this->allPlayers = collect(json_decode($dataFile, true))
             ->pluck('player'); // вытаскиваем сам объект player
 
-        $this->team       = collect();
-        $this->roleCount  = array_fill_keys(array_keys(self::ROLE_LIMITS), 0);
+        $this->team = collect();
+        $this->roleCount = array_fill_keys(array_keys(self::ROLE_LIMITS), 0);
 
         /**  Шаги по описанному алгоритму  **/
         $this->pick('FORWARD');
@@ -44,8 +51,7 @@ class PlayerSelectionService
         $this->pickBestCheap('DEFENDER');
         $this->pickBestCheap('GOALKEEPER');
 
-        $this->pick('FORWARD', null, fn ($p) =>
-            $p['price'] >= 6.5 &&
+        $this->pick('FORWARD', null, fn($p) => $p['price'] >= 6.5 &&
             $p['price'] <= 7.5 &&
             $p['price'] <= (100 - $this->budget));
 
@@ -63,9 +69,9 @@ class PlayerSelectionService
 
         $roleOrder = [
             'GOALKEEPER' => 1,   // сначала в списке
-            'DEFENDER'   => 2,
+            'DEFENDER' => 2,
             'MIDFIELDER' => 3,
-            'FORWARD'    => 4,   // в конце
+            'FORWARD' => 4,   // в конце
         ];
 
         $this->team = $this->team
@@ -193,7 +199,7 @@ class PlayerSelectionService
         $this->teamCount[$p['team']['name']] = ($this->teamCount[$p['team']['name']] ?? 0) + 1;
         $this->budget += $p['price'];
 
-        $this->allPlayers = $this->allPlayers->reject(fn ($x) => $x['name'] === $p['name']);
+        $this->allPlayers = $this->allPlayers->reject(fn($x) => $x['name'] === $p['name']);
 
         return true;
     }

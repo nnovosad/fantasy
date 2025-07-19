@@ -22,4 +22,6 @@ Route::get('/stats', function () {
     return view('stats');
 })->name('stats');
 
-Route::get('/assistant', AssistantController::class);
+Route::get('/assistant-new-season', function () {
+    return view('assistant');
+})->name('assistant-new-season');

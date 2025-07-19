@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Contracts\AssistantNewSeasonInterface;
 use App\Contracts\ConverterInterface;
 use App\Contracts\FiltrationDataInterface;
 use App\Contracts\JsonDataInterface;
 use App\Contracts\LeagueInterface;
 use App\Contracts\SearchDataInterface;
 use App\Contracts\SortingDataInterface;
+use App\Services\AssistantNewSeasonService;
 use App\Services\ConverterService;
 use App\Services\FiltrationDataService;
 use App\Services\JsonDataService;
@@ -35,6 +37,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(SearchDataInterface::class, SearchDataService::class);
 
         $this->app->singleton(ConverterInterface::class, ConverterService::class);
+
+        $this->app->singleton(AssistantNewSeasonInterface::class, AssistantNewSeasonService::class);
     }
 
     /**
@@ -48,7 +52,11 @@ class AppServiceProvider extends ServiceProvider
                 function ($perPage = 15, $page = null, $options = []) {
                     $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
                     return (new LengthAwarePaginator(
-                        $this->forPage($page, $perPage)->values()->all(), $this->count(), $perPage, $page, $options
+                        $this->forPage($page, $perPage)->values()->all(),
+                        $this->count(),
+                        $perPage,
+                        $page,
+                        $options
                     ))
                         ->withPath('');
                 }
