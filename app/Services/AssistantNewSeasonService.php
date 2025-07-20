@@ -5,12 +5,11 @@ namespace App\Services;
 use App\Contracts\AssistantNewSeasonInterface;
 use App\Contracts\LeagueInterface;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Storage;
 
 class AssistantNewSeasonService implements AssistantNewSeasonInterface
 {
     /** Ролевые лимиты */
-    private const ROLE_LIMITS = [
+    private const array ROLE_LIMITS = [
         'GOALKEEPER' => 2,
         'FORWARD' => 3,
         'DEFENDER' => 5,
@@ -86,11 +85,17 @@ class AssistantNewSeasonService implements AssistantNewSeasonInterface
             })
             ->values();
 
-        return $this->team->toArray();
+        $additionalInfo = sprintf(
+            "Итого: %d игроков   |   Бюджет: %.1f / 100   |   Баллы: %d",
+            $this->team->count(),
+            $this->budget,
+            $this->team->sum('seasonScoreInfo.score')
+        );
 
-//        foreach ($this->team as $player) {
-//            echo $player['name'] . ' - ' . $player['price'] . ' - ' . $player['role'] . ' - ' . $player['team']['name'] . ' - ' . $player['seasonScoreInfo']['score'] . '<br/>';
-//        }
+        return [
+            'team' => $this->team->toArray(),
+            'additionalInfo' => $additionalInfo,
+        ];
 
 //        echo sprintf(
 //            "Итого: %d игроков   |   Бюджет: %.1f / 100   |   Баллы: %d",

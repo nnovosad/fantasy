@@ -31,14 +31,15 @@ class AssistantNewSeason extends Component
 
     public function render(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
-        $players = $this->assistantNewSeason->watson($this->league);
+        $data = $this->assistantNewSeason->watson($this->league);
 
         return view(
             'livewire.assistant-new-season',
             [
                 'leagues' => $this->leagueService->getCountries(),
                 'selected_league' => ucfirst($this->league),
-                'players' => $players,
+                'players' => $data['team'],
+                'additional_info' => $data['additionalInfo'],
             ]
         );
     }

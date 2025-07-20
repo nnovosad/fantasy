@@ -13,6 +13,8 @@
     @if(!empty($players))
         <h1 class="text-2xl font-bold mt-8 mb-4">{{ $selected_league }}</h1>
 
+        <div> {{ $additional_info }} </div>
+
         <div class="mb-4 space-x-4">
             <!-- Основное содержимое -->
             <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
