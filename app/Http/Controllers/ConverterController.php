@@ -9,7 +9,10 @@ use Illuminate\Http\Request;
 
 class ConverterController extends Controller
 {
-    public function __construct(public ConverterInterface $converter) {}
+    public function __construct(
+        public ConverterInterface $converter
+    ) {
+    }
 
     public function __invoke(Request $request): void
     {

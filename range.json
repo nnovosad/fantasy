@@ -1,0 +1,25 @@
+{
+    "player": {
+        "name": "Лаутаро Мартинес",
+        "price": 9.5,
+        "role": "FORWARD",
+        "team": {
+            "name": "Интер"
+        },
+        "seasonScoreInfo": {
+            "place": 1,
+            "score": 184,
+            "totalPlaces": 35,
+            "averageScore": 5.6
+        },
+        "gameStat": {
+            "goals": 24,
+            "assists": 3,
+            "goalsConceded": 16,
+            "yellowCards": 5,
+            "redCards": 0,
+            "fieldMinutes": 2668,
+            "saves": 0
+        }
+    }
+}

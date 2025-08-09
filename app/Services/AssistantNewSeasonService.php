@@ -31,7 +31,7 @@ class AssistantNewSeasonService implements AssistantNewSeasonInterface
         $dataFile = $this->leagueService->getFileByLeague($league);
 
         $this->allPlayers = collect(json_decode($dataFile, true))
-            ->pluck('player'); // вытаскиваем сам объект player
+            ->pluck('player');
 
         $this->team = collect();
         $this->roleCount = array_fill_keys(array_keys(self::ROLE_LIMITS), 0);
@@ -54,7 +54,7 @@ class AssistantNewSeasonService implements AssistantNewSeasonInterface
             $p['price'] <= 7.5 &&
             $p['price'] <= (100 - $this->budget));
 
-        // Defender ≤ 5 €
+        // Defender <=5 €
         $this->pick('DEFENDER', null, fn($p) => $p['price'] <= 5);
 
         $cheapestDf = $this->filteredByRole('DEFENDER')->min('price') ?? 0;
@@ -96,22 +96,6 @@ class AssistantNewSeasonService implements AssistantNewSeasonInterface
             'team' => $this->team->toArray(),
             'additionalInfo' => $additionalInfo,
         ];
-
-//        echo sprintf(
-//            "Итого: %d игроков   |   Бюджет: %.1f / 100   |   Баллы: %d",
-//            $this->team->count(),
-//            $this->budget,
-//            $this->team->sum('seasonScoreInfo.score')
-//        );
-//
-//        echo 'Недостающие роли:';
-//        foreach (self::ROLE_LIMITS as $role => $limit) {
-//            $current = $this->roleCount[$role];
-//            if ($current < $limit) {
-//                echo (" - {$role}: не хватает " . ($limit - $current));
-//            }
-//        }
-//        echo ("Оставшийся бюджет: " . (100 - $this->budget));
     }
 
     /* ---------------------------------------------------
