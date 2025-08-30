@@ -1,11 +1,46 @@
-# fantasy
+# Fantasy (sports.ru)
 
-Statistics of sports.ru football fantasy results for the past year.
+Небольшое Laravel-приложение со статистикой по прошедшему фэнтези‑сезону 24/25 на Sports.ru и помощником для подготовки к сезону 25/26.
 
-Local run:
-./vendor/bin/sail up
+## Что внутри
+- Страница приветствия: краткое описание и ссылки.
+- Статистика прошлого сезона: сводные показатели и визуализация (Livewire компоненты).
+- «Ассистент нового сезона»: подборка игроков по лигам и дополнительная информация.
+- API endpoint для конвертера: `POST /api/converter`.
 
-nvm use v20.15.1
-npm run dev
+Доступные страницы:
+- Главная: `/`
+- Статистика: `/stats`
+- Ассистент: `/assistant-new-season`
 
-Url: http://localhost:8084/
+Базовый URL (Laravel Herd): http://fantasy.test
+
+## Локальный запуск
+Команды взяты из текущего README проекта.
+
+1. Запуск backend окружения через Sail:
+   ```bash
+   ./vendor/bin/sail up
+   ```
+2. Выбор версии Node.js через nvm:
+   ```bash
+   nvm use v20.15.1
+   ```
+3. Запуск фронтенд‑сборки в dev‑режиме:
+   ```bash
+   npm run dev
+   ```
+
+Альтернативный URL для docker‑окружения (если используется compose‑прокси): http://localhost:8084/
+
+Если изменения фронтенда не видны, запустите `npm run dev` ещё раз или выполните сборку.
+
+## Технологии
+- PHP 8.3, Laravel 11
+- Livewire 3, Tailwind CSS 3
+- Vite
+
+## Быстрые заметки
+- В проде и локально через Herd сайт доступен по: http://fantasy.test
+- Навигация доступна из лэйаута: Home, Statistics, Assistant.
+- Livewire компоненты требуют активного `@vite('resources/css/app.css')` и `@livewireScripts` в лэйауте (уже настроено).
